@@ -71,7 +71,7 @@ const CreatePoll = () => {
         }
 
         const options = {
-            url: 'http://localhost:3080/api/posts',
+            url: '/api/posts',
             method: 'POST', 
             headers: {
                 'Accept': 'application/json',
