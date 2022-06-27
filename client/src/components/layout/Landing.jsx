@@ -59,7 +59,7 @@ const Landing = (props) => {
             <Zoom in={showDesc}>
             <div className='description'>
                 <Typography variant='h4' style={{fontWeight: '200'}}>
-                    Create a poll with your thumnail variations, share it with your followers, get their feedback.
+                    <b>1.</b> Create a poll with your thumbnail variations, <b>2.</b> share it with your followers, <b>3.</b> get their feedback!
                 </Typography>
             </div>
             </Zoom>

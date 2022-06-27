@@ -3,12 +3,12 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import axios from 'axios';
 import Copyright from '../layout/Copyright';
-import React from 'react';
+import React, {useEffect} from 'react';
 
 let url1 = '';
 let url2 = '';
 
-const CreatePoll = () => {
+const CreatePoll = (props) => {
     const [file1, setFile1] = useState(null);
     const [file2, setFile2] = useState(null);
     const [desc, setDesc] = useState('');
@@ -17,6 +17,12 @@ const CreatePoll = () => {
     const [alerts, setAlerts] = React.useState([]);
     const [pollID, setPollID] = useState('');
     const [showLink, setShowLink] = useState(false);
+
+    useEffect(() => {
+        if (!props.isAuthenticated) {
+            window.location.href = "/signin"
+        }
+    });
 
     function uploadFile(event) {
         if (title === '') {
@@ -119,6 +125,9 @@ const CreatePoll = () => {
         <div className="create-poll">
             <Typography variant='h3' style={{fontWeight: 'bolder'}} className="create-poll-heading">Create Poll</Typography>
             <div className="create-poll-form">
+                <Typography style={{color: 'rgba(0, 0, 0, 0.6)'}}>
+                    Make sure you upload thumbnails of size <b>1280x720</b>/<b>16:9 ratio</b> as this is recommended for YouTube thumbnails.
+                </Typography>
                 <ThemeProvider theme={myTheme}>
                     <TextField onChange={(e) => {setTitle(e.target.value)}} style={{width: '100%'}} label="Title" variant="filled" />
                     <TextField onChange={(e) => {setDesc(e.target.value)}} multiline style={{width: '100%'}} rows={2} label="Description (optional)" variant="filled">/</TextField>

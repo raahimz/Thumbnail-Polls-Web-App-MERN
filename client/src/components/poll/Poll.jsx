@@ -36,6 +36,7 @@ const Poll = (props) => {
     const [noPostFound, setNoPostFound] = useState(false);
     const [hasVoted, setHasVoted] = useState(false);
     const [deleteForm, setDeleteForm] = useState('');
+    const [askForLogin, setAskForLogin] = useState(false);
 
     async function getPoll() {
         const id = (window.location.pathname).slice(7);
@@ -107,6 +108,10 @@ const Poll = (props) => {
     function submitVote() {
         const id = (window.location.pathname).slice(7);
 
+        if (!props.isAuthenticated) {
+            return setAskForLogin(true);
+        }
+
         if (props.userID === poll.userID) {
             return setAlerts([...alerts, {severity: 'warning', msg: "You are the author, you can't vote silly!"}]);
         }
@@ -163,7 +168,7 @@ const Poll = (props) => {
                 <Typography variant='h3' style={{fontWeight: 'bolder'}}>{!noPostFound ? "Which thumbnail is better?" : "Oops! Wrong page, no poll found"}</Typography>
             </div>
 
-            <div className='poll-description'>
+            { !noPostFound && <div className='poll-description'>
                 { render &&  <Typography variant='h6' style={{fontWeight: 'normal'}}>Title: <b>{poll.title}</b></Typography> }
                 { render &&  <Typography variant='h6' style={{fontWeight: 'normal'}}>Description: <b>{poll.description}</b></Typography> }
                 { render &&  <Typography variant='h6' style={{fontWeight: 'normal'}}>Author: <b>{poll.userName}</b> {(props.isAuthenticated && props.userID === poll.userID) && '(you)'}</Typography> }
@@ -171,10 +176,10 @@ const Poll = (props) => {
                     { (props.isAuthenticated && props.userID === poll.userID) && <Button onClick={() => {handleOpenPollResultsClick(true)}} fullWidth style={{marginTop: '10px'}} variant='outlined' startIcon={<PollIcon/>}>Poll Results</Button>}
                     { (props.isAuthenticated && props.userID === poll.userID) && <Button onClick={() => setOpenSettings(true)} fullWidth style={{marginTop: '10px'}} variant='outlined' startIcon={<Delete/>}>Delete Poll</Button>}
                 </ThemeProvider>
-            </div>
+            </div> }
 
             <ThemeProvider theme={myTheme}>
-                <Dialog fullWidth={true} onClose={() => {setOpenPollResults(false)}} open={openPollResults}>
+                { !noPostFound && <Dialog fullWidth={true} onClose={() => {setOpenPollResults(false)}} open={openPollResults}>
                     <DialogTitle>Poll Results</DialogTitle>
                     <DialogContent dividers>
                         <div>
@@ -217,11 +222,11 @@ const Poll = (props) => {
                             Close
                         </Button>
                     </DialogActions>
-                </Dialog>
+                </Dialog> }
             </ThemeProvider>
 
             <ThemeProvider theme={myTheme}>
-                <Dialog fullWidth={true} onClose={() => {setOpenSettings(false)}} open={openSettings}>
+                { !noPostFound && <Dialog fullWidth={true} onClose={() => {setOpenSettings(false)}} open={openSettings}>
                     <DialogTitle>Delete Poll</DialogTitle>
                     <DialogContent dividers>
                         <DialogContentText>
@@ -240,23 +245,45 @@ const Poll = (props) => {
                             Close
                         </Button>
                     </DialogActions>
-                </Dialog>
+                </Dialog> }
             </ThemeProvider>
 
-            <Typography style={{marginTop: '15px', opacity: '0.3'}} variant='h6'>*Select one of the following thumbnails</Typography>
+            <ThemeProvider theme={myTheme}>
+                { !noPostFound && <Dialog fullWidth={true} onClose={() => {setAskForLogin(false)}} open={askForLogin}>
+                    <DialogTitle>Please authenticate to vote</DialogTitle>
+                    <DialogContent dividers>
+                        <DialogContentText>
+                            To make sure that creators receive authentic feedback for their polls, we need you to sign-up/sign-in before voting. Thank you for understanding! ❤️
+                        </DialogContentText>
+                        <Typography style={{marginTop: '10px'}}>Come back to this link to vote after login: </Typography>
+                        <Typography variant="h6">https://shrouded-spire-35913.herokuapp.com/polls/{poll._id}</Typography>
+                        <Stack direction='row' spacing={1} style={{marginTop: '10px'}}>
+                            <Button onClick={() => {window.location.href = "/signin"}} fullWidth variant='outlined'>Sign-in</Button>
+                            <Button onClick={() => {window.location.href = "/signpup"}} fullWidth variant='contained'>Sign-up</Button>
+                        </Stack>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => {setAskForLogin(false)}}>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog> }
+            </ThemeProvider>
 
-            <Stack className="images-container" direction={ width > 1400 ? 'row' : 'column' } spacing={2}>
+            { !noPostFound && <Typography style={{marginTop: '15px', opacity: '0.3'}} variant='h6'>*Select one of the following thumbnails</Typography> }
+
+            { !noPostFound && <Stack className="images-container" direction={ width > 1400 ? 'row' : 'column' } spacing={2}>
                 <div className='img-overlay'>
                     { render && <img className='img' onClick={handleClick} name="option1" style={{objectFit: 'cover', border: optionChosen === "option1" && '10px solid #2eff8f'}} height="360" width="640" src={poll.option1.url} /> }
                 </div>
                 <div className='img-overlay'>
                     { render && <img className='img' onClick={handleClick} name="option2" style={{objectFit: 'cover', border: optionChosen === "option2" && '10px solid #2eff8f'}} height="360" width="640" src={poll.option2.url} /> }
                 </div>
-            </Stack>
+            </Stack> }
 
             <ThemeProvider theme={myTheme}>
-                { !optionChosen && <Button disabled style={{marginTop: '50px', padding: '15px', width: '200px'}}  variant="contained" size='large'>Vote</Button> }
-                { optionChosen && <Button onClick={() => submitVote()} style={{marginTop: '50px', padding: '15px', width: '200px'}}  variant="contained" size='large'>Vote</Button> }
+                { !optionChosen && !noPostFound && <Button disabled style={{marginTop: '50px', padding: '15px', width: '200px'}}  variant="contained" size='large'>Vote</Button> }
+                { optionChosen && !noPostFound && <Button onClick={() => submitVote()} style={{marginTop: '50px', padding: '15px', width: '200px'}}  variant="contained" size='large'>Vote</Button> }
             </ThemeProvider>
 
             {hasVoted && <ThemeProvider theme={myTheme}>

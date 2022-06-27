@@ -68,18 +68,18 @@ const App = () => {
             path="/signin"
             element={<Signin authenticate={authenticate} isAuthenticated={isAuthenticated} />}
           />
-          <Route
+          { render && <Route
             path="/dashboard"
-            element={<Dashboard />}
-          />
-          <Route
+            element={<Dashboard isAuthenticated={isAuthenticated} />}
+          /> }
+          { render && <Route
             path="/dashboard/create"
-            element={<CreatePoll />}
-          />
-          <Route
+            element={<CreatePoll isAuthenticated={isAuthenticated} />}
+          /> }
+          { render && <Route
             path="/polls/:id"
             element={<Poll isAuthenticated={isAuthenticated} userID={user && user._id} />}
-          />
+          /> }
         </Routes>
       </Router>
     </Fragment>

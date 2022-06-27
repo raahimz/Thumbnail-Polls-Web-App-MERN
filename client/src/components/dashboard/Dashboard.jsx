@@ -7,7 +7,7 @@ import React from 'react';
 import ListItemText from '@mui/material/ListItemText';
 
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     const [polls, setPolls] = useState([]);
     const [render, setRender] = useState(false);
     const [noData, setNoData] = useState(false);
@@ -40,6 +40,10 @@ const Dashboard = () => {
 
     useEffect(() => {
         getPolls();
+
+        if (!props.isAuthenticated) {
+            window.location.href = "/signin"
+        }
     }, []);
 
     const myTheme = createTheme({

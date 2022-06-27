@@ -18,7 +18,6 @@ import axios from 'axios';
 import Copyright from '../layout/Copyright';
 import { useNavigate } from 'react-router-dom'
 
-
 const theme = createTheme({
     palette: {
         primary: {
@@ -119,10 +118,6 @@ export default function Login(props) {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"
