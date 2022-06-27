@@ -128,7 +128,7 @@ const CreatePoll = () => {
                     {loading && <CircularProgress />}
                 </ThemeProvider>
             </div>
-            {showLink && <Typography style={{marginTop: '20px'}}>View poll @ <a href={`http://localhost:3000/polls/${pollID}`}><b><u>http://localhost:3000/polls/{pollID}</u></b></a></Typography>}
+            {showLink && <Typography style={{marginTop: '20px'}}>View poll @ <a href={`/polls/${pollID}`}><b><u>https://shrouded-spire-35913.herokuapp.com/polls/{pollID}</u></b></a></Typography>}
             <div className='alerts' style={{width: '40%', margin: '10px auto 0px auto'}}>
                 {alerts.map((alert, index) => <Zoom key={index} in={true}><Alert onClose={() => deleteAlert(index)} severity={alert.severity} sx={{ mt: 2 }}>{alert.msg}</Alert></Zoom>)}
             </div>
