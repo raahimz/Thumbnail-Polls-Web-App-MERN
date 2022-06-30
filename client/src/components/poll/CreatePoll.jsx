@@ -37,7 +37,7 @@ const CreatePoll = (props) => {
 
         setLoading(true);
 
-        const UPLOAD_ENDPOINT = 'https://api.cloudinary.com/v1_1/dtcreshc3/image/upload';
+        const UPLOAD_ENDPOINT = 'invalid';
 
         const files = [file1, file2];
         let i = 0
